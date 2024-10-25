@@ -253,23 +253,26 @@ class Bandcamper:
     def download_fallback_mp3(self, track_info, artist, album, title, destination):
         file_paths = []
         for track in track_info:
-            if track.get("file"):
-                
-                if track["track_num"] is None:
-                    track_num = 1
-                else:
-                    track_num = f"{track['track_num']:02d}"
-
-                if title is None:
-                    title = track["title"]
-                file_paths.append(
-                    self.requester.download_to_file(
-                        track["file"]["mp3-128"],
-                        destination,
-                        f"{artist} - {album} - {track_num} {title}{{ext}}",
-                        f"{track_num}.mp3",
+            try:
+                if track.get("file"):
+                    
+                    if track["track_num"] is None:
+                        track_num = 1
+                    else:
+                        track_num = f"{track['track_num']:02d}"
+    
+                    if title is None:
+                        title = track["title"]
+                    file_paths.append(
+                        self.requester.download_to_file(
+                            track["file"]["mp3-128"],
+                            destination,
+                            f"{artist} - {album} - {track_num} {title}{{ext}}",
+                            f"{track_num}.mp3",
+                        )
                     )
-                )
+            except Exception:
+                    continue
         return file_paths
 
     def download_from_url(
